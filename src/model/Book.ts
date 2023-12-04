@@ -5,5 +5,5 @@ export default interface Book {
     key: string;
     publish_date: number;
     authors?: Author[];
-
+    description : string;
 }

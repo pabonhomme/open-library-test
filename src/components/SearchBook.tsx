@@ -5,13 +5,13 @@ import Book from "../model/Book";
 
 interface SearchBookProps {
     setCurrentBook: (book: Book) => void;
+    setError: (val: boolean) => void;
 }
 
-export default function SearchBook({ setCurrentBook }: SearchBookProps) {
+export default function SearchBook({ setCurrentBook, setError }: SearchBookProps) {
 
     const [openLibraryId, setOpenLibraryId] = useState<string>();
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
+
 
 
     async function onsubmit(event: any) {
@@ -29,16 +29,18 @@ export default function SearchBook({ setCurrentBook }: SearchBookProps) {
                 }
                 return response.json();
             }).then((book) => {
-                setSuccess(true);
+
 
                 setCurrentBook(book[`ISBN:${openLibraryId}`].details);
-                setTimeout(() => {
-                    setOpenLibraryId("");
-                    setSuccess(false);
-                }, 1000);
+                setOpenLibraryId("");
+
             })
             .catch((error: any) => {
-                setError(error.message);
+                setError(true);
+                setTimeout(() => {
+
+                    setError(false);
+                }, 1000);
             });
     }
 
@@ -69,12 +71,7 @@ export default function SearchBook({ setCurrentBook }: SearchBookProps) {
             Add
         </Button>
     </Form>
-        {error != null && (
-            <p className="alert alert-danger mt-3">{error}</p>
-        )}
-        {success && (
-            <p className="alert alert-success mt-3">Book Added</p>
-        )}</div>
+    </div>
 
     );
 }

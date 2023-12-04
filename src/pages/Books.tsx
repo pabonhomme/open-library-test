@@ -9,15 +9,32 @@ export default function Books() {
 
     const [books, setBooks] = useState<Book[]>([]);
     const [currentBook, setCurrentBook] = useState<Book | undefined>();
+    const [error, setError] = useState<boolean>(false);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         if (currentBook) {
-            const booksCopy = [...books];
+            if (books.findIndex(book => book.key === currentBook.key) == -1) {
+                setSuccess(true);
+                const booksCopy = [...books];
 
-            booksCopy.push(currentBook);
+                booksCopy.push(currentBook);
 
-            setBooks(booksCopy);
+                setBooks(booksCopy);
+                setTimeout(() => {
+
+                    setSuccess(false);
+                }, 1000);
+            } else {
+                setError(true);
+                setTimeout(() => {
+
+                    setError(false);
+                }, 1000);
+            }
+
         }
+
     }, [currentBook]);
 
     return (
@@ -25,18 +42,25 @@ export default function Books() {
             <h1 className="font-weight-bold text-center">
                 Book Manager
             </h1>
-            <SearchBook setCurrentBook={setCurrentBook} />
+            <SearchBook setCurrentBook={setCurrentBook}
+                setError={setError} />
+            {error && (
+                <p className="alert alert-danger mt-3">Book not found or already added</p>
+            )}
+            {success && (
+                <p className="alert alert-success mt-3">Book found</p>
+            )}
             <div className="books-list">
                 {books.length === 0 && (<Container className="grid-no-books p-5">
                     <Row className="justify-content-md-center">
                         <div>No book added</div>
                     </Row>
                 </Container>)}
-                {books && (<Container className="grid-books p-5">
-                    {books.map((book) => {
-                        return <Row key={book.key} xs={4}><BookCard book={book} /></Row>
-                    })}
-                </Container>)}
+                {books &&
+                    books.map((book) => {
+                        return <BookCard key={book.key} book={book} />
+                    })
+                }
             </div>
 
         </div>

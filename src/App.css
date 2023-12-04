@@ -3,14 +3,14 @@
   text-align: center;
 }
 
-.books-container{
+.books-container {
   width: 30% !important;
   box-shadow: 0 0 10px gray;
   border: 0px solid black !important;
   border-radius: 5px;
 }
 
-.book-input-search{
+.book-input-search {
   width: 60% !important;
 }
 
@@ -19,4 +19,18 @@
   width: 20% !important;
   height: 5% !important;
   white-space: nowrap;
+}
+
+.book-card {
+  font-size: 0.8rem !important;
+  width: 100% !important;
+  border-top: 1px solid black !important;
+}
+
+.book-title {
+  font-size: 0.8rem !important;
+}
+
+.input-description{
+  height: 10% !important;
 }
