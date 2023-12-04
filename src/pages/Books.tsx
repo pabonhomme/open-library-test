@@ -17,7 +17,6 @@ export default function Books() {
             if (books.findIndex(book => book.key === currentBook.key) == -1) {
                 setSuccess(true);
                 const booksCopy = [...books];
-                currentBook.dateAdded = new Date();
 
                 booksCopy.push(currentBook);
 
@@ -61,6 +60,18 @@ export default function Books() {
         sortBooks(sortOption);
     };
 
+    const handleDescriptionChange = (updatedBook: Book) => {
+        setBooks((prevBooks) => {
+            const updatedBooks = prevBooks.map((book) => {
+                if (book.key === updatedBook.key) {
+                    return updatedBook;
+                }
+                return book;
+            });
+            return updatedBooks;
+        });
+    };
+
     return (
         <div className="books-container container-fluid p-5 mt-5">
             <h1 className="font-weight-bold text-center">
@@ -95,7 +106,11 @@ export default function Books() {
                 </Container>)}
                 {books &&
                     books.map((book) => {
-                        return <BookCard key={book.key} book={book} />
+                        return <BookCard
+                        key={book.key}
+                        book={book}
+                        onDescriptionChange={handleDescriptionChange}
+                    />
                     })
                 }
             </div>

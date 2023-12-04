@@ -4,10 +4,18 @@ import Author from "../model/Author";
 
 interface BookCardProps {
     book: Book;
+    onDescriptionChange: (updatedBook: Book) => void;
 }
 
-export default function BookCard({ book }: BookCardProps) {
+export default function BookCard({ book, onDescriptionChange }: BookCardProps) {
 
+        function handleDescriptionChange(event: { target: { value: string }; }) {
+            onDescriptionChange({
+                ...book,
+                description: event.target.value,
+            });
+        }
+    
 
     return (
         <div className="d-flex flex-column book-card p-2">
@@ -26,7 +34,8 @@ export default function BookCard({ book }: BookCardProps) {
             <input
                 className="form-control input-description"
                 type="text"
-                value={book.description}
+                value={book.description || ''}
+                onChange={handleDescriptionChange}
                 placeholder="Enter a description ..."
             />
 
