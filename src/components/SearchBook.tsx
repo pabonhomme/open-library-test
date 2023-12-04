@@ -30,8 +30,18 @@ export default function SearchBook({ setCurrentBook, setError }: SearchBookProps
                 return response.json();
             }).then((book) => {
 
+                const bookDetails = book[`ISBN:${openLibraryId}`].details;
 
-                setCurrentBook(book[`ISBN:${openLibraryId}`].details);
+                const newBook: Book = {
+                    title: bookDetails.title,
+                    key: bookDetails.key,
+                    publish_date: bookDetails.publish_date,
+                    authors: bookDetails.authors,
+                    dateAdded: new Date(),
+                    description: bookDetails.description?.value || bookDetails.description,
+                };
+
+                setCurrentBook(newBook);
                 setOpenLibraryId("");
 
             })
