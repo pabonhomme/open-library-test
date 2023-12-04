@@ -1,21 +1,51 @@
 import { SetStateAction, useState } from "react";
 import { Button, Form } from "react-bootstrap"
+import config from "../config";
+import Book from "../model/Book";
 
-export default function SearchBook() {
+interface SearchBookProps {
+    setCurrentBook: (book: Book) => void;
+}
 
-    const [bookName, setBookName] = useState<string>();
+export default function SearchBook({ setCurrentBook }: SearchBookProps) {
+
+    const [openLibraryId, setOpenLibraryId] = useState<string>();
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
+
     async function onsubmit(event: any) {
-        setSuccess(true);
-        setTimeout(() => {
-        }, 2000);
+        event.preventDefault();
+        const apiUrl = config.SINGLE_BOOK_API(openLibraryId);
+
+        fetch(apiUrl, {
+            method: "GET",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.text().then((errorMessage: any) => {
+                        throw new Error(errorMessage);
+                    });
+                }
+                return response.json();
+            }).then((book) => {
+                setSuccess(true);
+                setCurrentBook(book.details);
+                setTimeout(() => {
+                    setOpenLibraryId("");
+                    setSuccess(false);
+                }, 1000);
+            })
+            .catch((error: any) => {
+                setError(error.message);
+            });
     }
 
     function handleBookChange(event: { target: { value: SetStateAction<string | undefined>; }; }) {
-        setBookName(event.target.value);
+        setOpenLibraryId(event.target.value);
     }
+
+
 
     return (<div><Form className="d-flex justify-content-around form-book" onSubmit={onsubmit}>
         <Form.Group className="mb-3 book-input-search" controlId="formBasicBook">
@@ -27,6 +57,7 @@ export default function SearchBook() {
                 required={false}
                 type="text"
                 placeholder="OLID"
+                value={openLibraryId}
                 onChange={handleBookChange}
             />
         </Form.Group>
