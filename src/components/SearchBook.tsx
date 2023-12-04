@@ -30,7 +30,8 @@ export default function SearchBook({ setCurrentBook }: SearchBookProps) {
                 return response.json();
             }).then((book) => {
                 setSuccess(true);
-                setCurrentBook(book.details);
+
+                setCurrentBook(book[`ISBN:${openLibraryId}`].details);
                 setTimeout(() => {
                     setOpenLibraryId("");
                     setSuccess(false);

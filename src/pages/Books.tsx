@@ -7,14 +7,14 @@ import SearchBook from "../components/SearchBook";
 export default function Books() {
 
     const [books, setBooks] = useState<Book[]>();
-    const [currentBook, setCurrentBook] = useState<Book>();
+    const [currentBook, setCurrentBook] = useState<Book | undefined>();
 
     async function getAllBooks() {
 
     }
 
     useEffect(() => {
-        console.log(currentBook);
+        console.log("useEffect triggered. Current Book:", currentBook);
     }, [currentBook]);
 
 
@@ -23,7 +23,7 @@ export default function Books() {
             <h1 className="font-weight-bold text-center">
                 Book Manager
             </h1>
-            <SearchBook setCurrentBook={setCurrentBook}/>
+            <SearchBook setCurrentBook={setCurrentBook} />
 
         </div>
     );
