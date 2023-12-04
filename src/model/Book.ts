@@ -6,4 +6,5 @@ export default interface Book {
     publish_date: number;
     authors?: Author[];
     description : string;
+    dateAdded: Date;
 }

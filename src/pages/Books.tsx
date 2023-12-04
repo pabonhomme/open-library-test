@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from "react";
 import Book from "../model/Book";
-import { Button, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Dropdown, Form, Row } from "react-bootstrap";
 import { cp } from "fs";
 import SearchBook from "../components/SearchBook";
 import BookCard from "../components/BookCard";
@@ -17,6 +17,7 @@ export default function Books() {
             if (books.findIndex(book => book.key === currentBook.key) == -1) {
                 setSuccess(true);
                 const booksCopy = [...books];
+                currentBook.dateAdded = new Date();
 
                 booksCopy.push(currentBook);
 
@@ -37,6 +38,29 @@ export default function Books() {
 
     }, [currentBook]);
 
+    const sortBooks = (sortBy: string) => {
+        let sortedBooks = [...books];
+        if (sortBy === "dateAdded") {
+            sortedBooks.sort((a, b) => {
+                if (a.dateAdded && b.dateAdded) {
+                    return a.dateAdded.getTime() - b.dateAdded.getTime();
+                }
+                // Handle cases where dateAdded is undefined
+                return 0;
+            });
+        } else if (sortBy === "titleAscending") {
+            sortedBooks.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (sortBy === "titleDescending") {
+            sortedBooks.sort((a, b) => b.title.localeCompare(a.title));
+        }
+
+        setBooks(sortedBooks);
+    };
+
+    const handleSortClick = (sortOption: string) => {
+        sortBooks(sortOption);
+    };
+
     return (
         <div className="books-container container-fluid p-5 mt-5">
             <h1 className="font-weight-bold text-center">
@@ -50,7 +74,20 @@ export default function Books() {
             {success && (
                 <p className="alert alert-success mt-3">Book found</p>
             )}
-            <div className="books-list">
+            <div className="d-flex justify-content-end">
+                <Dropdown className="align-self-end">
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                        Filter
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => handleSortClick("dateAdded")}>Added order</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSortClick("titleAscending")}>Title ascending</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSortClick("titleDescending")}>Title descending</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            </div>
+
+            <div className="books-list mt-4">
                 {books.length === 0 && (<Container className="grid-no-books p-5">
                     <Row className="justify-content-md-center">
                         <div>No book added</div>
