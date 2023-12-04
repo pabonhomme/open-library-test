@@ -107,10 +107,10 @@ export default function Books() {
                 {books &&
                     books.map((book) => {
                         return <BookCard
-                        key={book.key}
-                        book={book}
-                        onDescriptionChange={handleDescriptionChange}
-                    />
+                            key={book.key}
+                            book={book}
+                            onDescriptionChange={handleDescriptionChange}
+                        />
                     })
                 }
             </div>

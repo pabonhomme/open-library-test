@@ -9,13 +9,13 @@ interface BookCardProps {
 
 export default function BookCard({ book, onDescriptionChange }: BookCardProps) {
 
-        function handleDescriptionChange(event: { target: { value: string }; }) {
-            onDescriptionChange({
-                ...book,
-                description: event.target.value,
-            });
-        }
-    
+    function handleDescriptionChange(event: { target: { value: string }; }) {
+        onDescriptionChange({
+            ...book,
+            description: event.target.value,
+        });
+    }
+
 
     return (
         <div className="d-flex flex-column book-card p-2">
